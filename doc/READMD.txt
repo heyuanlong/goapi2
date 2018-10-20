@@ -1,0 +1,3 @@
+select unix_timestamp("2018-04-08") ;
+select unix_timestamp("2018-04-08")+ 3600*24 - 1 ;
+
