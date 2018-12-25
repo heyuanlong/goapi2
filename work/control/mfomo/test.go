@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
-	klog "github.com/heyuanlong/go-utils/common/log"
-
+	kinit "goapi2/initialize"
 	kcode "goapi2/work/code"
 	kbase "goapi2/work/control/base"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Test struct {
@@ -43,11 +43,11 @@ type test2Struct struct {
 func (ts *Test) Test1(c *gin.Context) {
 	callbackName := kbase.GetParam(c, "callback")
 	wallet_account := kbase.GetParam(c, "wallet_account")
-	klog.Warn.Println("wallet_account:", wallet_account)
+	kinit.LogWarn.Println("wallet_account:", wallet_account)
 
 	min_coins, err := strconv.ParseFloat(kbase.GetParam(c, "min_coins"), 0)
 	if err != nil {
-		klog.Warn.Println(min_coins, err)
+		kinit.LogWarn.Println(min_coins, err)
 		kbase.SendErrorJsonStr(c, kcode.PARAM_WRONG, callbackName)
 		return
 	}

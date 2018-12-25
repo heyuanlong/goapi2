@@ -1,11 +1,6 @@
 package service
 
-import (
-	jgorm "github.com/jinzhu/gorm"
-)
-
 type SettleStruct struct {
-	tx *jgorm.DB
 	tm int64
 }
 

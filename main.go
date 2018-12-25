@@ -6,10 +6,9 @@ import (
 	kmfomo "goapi2/work/control/mfomo"
 	"strconv"
 	//klog "github.com/heyuanlong/go-utils/common/log"
+	kinit "goapi2/initialize"
 	kroute "goapi2/route"
 	kservice "goapi2/work/service"
-
-	kconf "github.com/heyuanlong/go-utils/common/conf"
 )
 
 func main() {
@@ -21,7 +20,7 @@ func main() {
 	kservice.InitSystem()
 
 	if *types == "api" {
-		portStr, _ := kconf.GetString("server", "port")
+		portStr, _ := kinit.Conf.GetString("server", "port")
 		port, _ := strconv.Atoi(portStr)
 		r := kroute.NewRouteStruct(port)
 		r.SetMiddleware(kroute.SetCommonHeader)

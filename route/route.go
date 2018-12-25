@@ -3,10 +3,10 @@ package route
 import (
 	"fmt"
 
+	kinit "goapi2/initialize"
 	kbase "goapi2/work/control/base"
 
 	"github.com/gin-gonic/gin"
-	klog "github.com/heyuanlong/go-utils/common/log"
 )
 
 type ControlInterface interface {
@@ -46,7 +46,7 @@ func (ts *RouteStruct) Load(control ControlInterface) {
 		case "DELETE":
 			ts.engine.DELETE(v.Path, v.F)
 		default:
-			klog.Error.Println("not method :", v.Method)
+			kinit.LogError.Println("not method :", v.Method)
 		}
 	}
 }

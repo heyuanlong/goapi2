@@ -18,9 +18,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/parnurzeal/gorequest"
 
+	kinit "goapi2/initialize"
 	kcode "goapi2/work/code"
-
-	klog "github.com/heyuanlong/go-utils/common/log"
 )
 
 func init() {
@@ -41,7 +40,7 @@ func GetParam(c *gin.Context, key string) string {
 func ReturnData(c *gin.Context, v interface{}, callbackName string) {
 	jsonStr, err := json.Marshal(v)
 	if err != nil {
-		klog.Error.Println(err)
+		kinit.LogError.Println(err)
 	}
 	if callbackName == "" {
 		c.Data(http.StatusOK, "text/plain", jsonStr)
@@ -83,14 +82,14 @@ func UrlPostGetJsonString(url string, paramMap map[string]interface{}, path stri
 	if err != nil {
 		return "", err
 	}
-	klog.Warn.Println(string(param))
+	kinit.LogWarn.Println(string(param))
 	request := gorequest.New().Timeout(5 * time.Second)
 	_, body, errs := request.Post(url).Type("multipart").Send(string(param)).End()
 	if errs != nil {
-		klog.Warn.Println("request.Post fail:", errs)
+		kinit.LogWarn.Println("request.Post fail:", errs)
 		return "", errs[0]
 	}
-	klog.Info.Println(string(body))
+	kinit.LogInfo.Println(string(body))
 	jsonParsed, err := gabs.ParseJSON([]byte(body))
 	if err != nil {
 		return "", err
@@ -123,7 +122,7 @@ func GetSignWithSha256(key, secret string, param map[string]interface{}) string 
 		case float64:
 			paramM[k] = strconv.FormatFloat(float64(val), 'f', -1, 64)
 		default:
-			klog.Warn.Println(k, v)
+			kinit.LogWarn.Println(k, v)
 		}
 	}
 	keys := make([]string, 0, len(paramM))
@@ -138,14 +137,14 @@ func GetSignWithSha256(key, secret string, param map[string]interface{}) string 
 
 	fmt.Fprintf(&b, "key=%s", key)
 	paramStr := b.Bytes()
-	klog.Warn.Println(string(paramStr))
+	kinit.LogWarn.Println(string(paramStr))
 
 	mac := hmac.New(sha256.New, []byte(secret))
 	mac.Write(paramStr)
 	//bs := mac.Sum(nil)
 	sha := hex.EncodeToString(mac.Sum(nil))
 	sha = strings.ToUpper(sha)
-	klog.Warn.Println(sha)
+	kinit.LogWarn.Println(sha)
 
 	return sha
 }

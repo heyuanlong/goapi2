@@ -6,19 +6,17 @@ import (
 
 	"github.com/jinzhu/now"
 
+	kinit "goapi2/initialize"
 	kcode "goapi2/work/code"
-
-	kconf "github.com/heyuanlong/go-utils/common/conf"
-	klog "github.com/heyuanlong/go-utils/common/log"
 )
 
 const SETTLE_TIME_SECOND = 1
 
 func InitSystem() {
 
-	t, err := kconf.GetInt("server", "is_test")
+	t, err := kinit.Conf.GetInt("server", "is_test")
 	if err == nil && t == 1 {
-		klog.Info.Println("this is test server")
+		kinit.LogInfo.Println("this is test server")
 		kcode.IS_TEST_SERVER = t
 	}
 
@@ -26,9 +24,9 @@ func InitSystem() {
 }
 
 func Run() {
-	t, err := kconf.GetInt("server", "timestamp")
+	t, err := kinit.Conf.GetInt("server", "timestamp")
 	if err != nil {
-		klog.Error.Println("get timestamp fail:", err)
+		kinit.LogError.Println("get timestamp fail:", err)
 		return
 	}
 	timestamp := int64(t)
@@ -48,7 +46,7 @@ func Run() {
 		case <-t3.C:
 			timer := GetTimer(timestamp)
 			t3.Reset(time.Second * time.Duration(timer))
-			klog.Error.Println("深夜调用")
+			kinit.LogError.Println("深夜调用")
 		}
 	}
 }
