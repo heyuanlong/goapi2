@@ -24,7 +24,6 @@ var Gorm *gorm.DB
 var RedisPool *kredis.RedisPool
 
 func init() {
-	var err error
 	runtime.GOMAXPROCS(runtime.NumCPU()) //多核设置
 	Conf = conf.NewKconf(CONFIG_PATH)
 
@@ -33,6 +32,7 @@ func init() {
 	LogInfo = klog.Info
 	LogDebug = klog.Debug
 
+	var err error
 	mysql_user, _ := Conf.GetString("mysql", "user")
 	mysql_password, _ := Conf.GetString("mysql", "password")
 	mysql_ip, _ := Conf.GetString("mysql", "ip")

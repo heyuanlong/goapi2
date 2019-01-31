@@ -22,6 +22,12 @@ import (
 	kcode "goapi2/work/code"
 )
 
+type DataIStruct struct {
+	Status int         `json:"status"`
+	Info   string      `json:"info"`
+	Data   interface{} `json:"data"`
+}
+
 func init() {
 
 }
@@ -37,6 +43,14 @@ func GetParam(c *gin.Context, key string) string {
 	return v
 }
 
+func ReturnDataI(c *gin.Context, status int, v interface{}, callbackName string) {
+	object := DataIStruct{
+		Status: status,
+		Info:   kcode.GetCodeMsg(status),
+		Data:   v,
+	}
+	ReturnData(c, object, callbackName)
+}
 func ReturnData(c *gin.Context, v interface{}, callbackName string) {
 	jsonStr, err := json.Marshal(v)
 	if err != nil {

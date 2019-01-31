@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	_ "goapi2/initialize"
-	kmfomo "goapi2/work/control/mfomo"
+	ktest "goapi2/work/control/test"
 	"strconv"
 	//klog "github.com/heyuanlong/go-utils/common/log"
 	kinit "goapi2/initialize"
@@ -25,7 +25,7 @@ func main() {
 		r := kroute.NewRouteStruct(port)
 		r.SetMiddleware(kroute.SetCommonHeader)
 
-		r.Load(kmfomo.NewTest())
+		r.Load(ktest.NewTest())
 		r.Run()
 	}
 	if *types == "settle" {

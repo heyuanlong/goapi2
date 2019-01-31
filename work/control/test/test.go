@@ -1,4 +1,4 @@
-package mfomo
+package test
 
 import (
 	"net/http"
@@ -27,17 +27,12 @@ func (ts *Test) Load() []kbase.RouteWrapStruct {
 
 //-----------------------------------------------------------------------------------
 
-// http://127.0.0.1:8080/mfomo/test?wallet_account=0x2d437Ec35E7d13a1AfF58250EeDc2808b92D9725&min_coins=0.5&chain_id=1
+// http://127.0.0.1:8080/mfomo/test1?wallet_account=0x2d437Ec35E7d13a1AfF58250EeDc2808b92D9725&min_coins=0.5&chain_id=1
 type subtest2Struct struct {
 	WalletAccout string  `json:"wallet_account"` // 转币地址
 	MinCoins     float64 `json:"min_coins"`      //最少投入eth数量
 	ChainId      int     `json:"chain_id"`       //分红占比
 
-}
-type test2Struct struct {
-	Status int            `json:"status"`
-	Info   string         `json:"info"`
-	Data   subtest2Struct `json:"data"`
 }
 
 func (ts *Test) Test1(c *gin.Context) {
@@ -62,12 +57,7 @@ func (ts *Test) Test1(c *gin.Context) {
 		MinCoins:     min_coins,
 		ChainId:      chain_id,
 	}
-	object := test2Struct{
-		Status: kcode.SUCCESS_STATUS,
-		Info:   kcode.GetCodeMsg(kcode.SUCCESS_STATUS),
-		Data:   subObject,
-	}
-	kbase.ReturnData(c, object, callbackName)
+	kbase.ReturnDataI(c, kcode.SUCCESS_STATUS, subObject, callbackName)
 }
 
 //-----------------------------------------------------------------------------------
