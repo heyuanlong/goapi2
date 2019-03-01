@@ -1,5 +1,7 @@
 package code
 
+// 不可变参数
+
 const (
 	KEY    = "xxxxxxxxxxxxxxx"
 	SECRET = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
