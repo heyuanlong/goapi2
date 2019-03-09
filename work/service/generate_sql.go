@@ -41,7 +41,7 @@ func (ts *GenerateSqlStruct) Run(table_schema, table_name string) {
 //---------------------------------------------------------------------------
 func createTable(table_name string, rows *ksql.Rows) string {
 	var sql string
-	sql += "type " + converUpper(table_name) + " struct {\n"
+	sql += "package model\n\n\n\n type " + converUpper(table_name) + " struct {\n"
 	for rows.Next() {
 		column_name := ""
 		data_type := ""
