@@ -21,6 +21,7 @@ func (ts *Test) Load() []kbase.RouteWrapStruct {
 	m := make([]kbase.RouteWrapStruct, 0)
 	m = append(m, kbase.Wrap("GET", "/mfomo/test1", ts.Test1, 0))
 	m = append(m, kbase.Wrap("GET", "/mfomo/test2", ts.Test2, 0))
+	m = append(m, kbase.Wrap("GET", "/mfomo/test3", ts.test3, 0))
 
 	return m
 }
@@ -68,3 +69,28 @@ func (ts *Test) Test2(c *gin.Context) {
 }
 
 //-----------------------------------------------------------------------------------
+// http://127.0.0.1:8080/mfomo/test3
+func (ts *Test) test3(c *gin.Context) {
+	m := make(map[string]interface{})
+	m["status"] = 1
+	m["amount"] = 1.333
+	m["Str"] = "xxxxxxxxxxxxxx"
+
+	obj := struct {
+		WalletAccout string  `json:"wallet_account"` // 转币地址
+		MinCoins     float64 `json:"min_coins"`      //最少投入eth数量
+		maxCoins     float64 `json:"min_coins"`      //最少投入eth数量
+	}{
+		WalletAccout: "wallet_account",
+		MinCoins:     9.08,
+		maxCoins:     8888,
+	}
+
+	mx := make(map[string]interface{})
+	mx["status"] = 3
+	mx["amount"] = 3.333
+
+	m["struct"] = obj
+	m["Map"] = mx
+	kbase.ReturnDataI(c, kcode.SUCCESS_STATUS, m, "")
+}
