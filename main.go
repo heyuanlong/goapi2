@@ -21,11 +21,13 @@ func main() {
 
 	kservice.InitSystem()
 	if *types == "sql" {
+		kinit.InitMysql()
 		s := kservice.NewGenerateSqlStruct()
 		s.Run(*table_schema, *table_name)
 	}
 
 	if *types == "api" {
+		kinit.InitMysql()
 		portStr, _ := kinit.Conf.GetString("server", "port")
 		port, _ := strconv.Atoi(portStr)
 		r := kroute.NewRouteStruct(port)

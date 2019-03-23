@@ -31,24 +31,27 @@ func init() {
 	LogWarn = klog.Warn
 	LogInfo = klog.Info
 	LogDebug = klog.Debug
+}
 
-	var err error
+func InitMysql() {
 	mysql_user, _ := Conf.GetString("mysql", "user")
 	mysql_password, _ := Conf.GetString("mysql", "password")
 	mysql_ip, _ := Conf.GetString("mysql", "ip")
 	mysql_port, _ := Conf.GetString("mysql", "port")
 	mysql_mysqldb, _ := Conf.GetString("mysql", "mysqldb")
-	Gorm, err = kgorm.NewGorm(mysql_user, mysql_password, mysql_ip, mysql_port, mysql_mysqldb)
+	tmpGorm, err := kgorm.NewGorm(mysql_user, mysql_password, mysql_ip, mysql_port, mysql_mysqldb)
 	if err != nil {
 		log.Println(err)
 	}
-
+	Gorm = tmpGorm
+}
+func InitRedis() {
 	redis_host, _ := Conf.GetString("redis", "host")
 	redis_port, _ := Conf.GetString("redis", "port")
 	redis_auth, _ := Conf.GetString("redis", "auth")
-	RedisPool, err = kredis.NewRedisPool(redis_host, redis_port, redis_auth)
+	tmpRedisPool, err := kredis.NewRedisPool(redis_host, redis_port, redis_auth)
 	if err != nil {
 		log.Println(err)
 	}
-
+	RedisPool = tmpRedisPool
 }
