@@ -40,13 +40,13 @@ func Run() {
 		select {
 
 		case <-t1.C:
-			t1.Reset(time.Second * SETTLE_TIME_SECOND)
 			BusiSettle.Run()
+			t1.Reset(time.Second * SETTLE_TIME_SECOND)
 
 		case <-t3.C:
+			kinit.LogError.Println("深夜调用")
 			timer := GetTimer(timestamp)
 			t3.Reset(time.Second * time.Duration(timer))
-			kinit.LogError.Println("深夜调用")
 		}
 	}
 }
