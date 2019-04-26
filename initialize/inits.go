@@ -42,6 +42,7 @@ func InitMysql() {
 	tmpGorm, err := kgorm.NewGorm(mysql_user, mysql_password, mysql_ip, mysql_port, mysql_mysqldb)
 	if err != nil {
 		log.Println(err)
+		panic(err)
 	}
 	Gorm = tmpGorm
 }
@@ -52,6 +53,7 @@ func InitRedis() {
 	tmpRedisPool, err := kredis.NewRedisPool(redis_host, redis_port, redis_auth)
 	if err != nil {
 		log.Println(err)
+		panic(err)
 	}
 	RedisPool = tmpRedisPool
 }

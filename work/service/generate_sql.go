@@ -31,7 +31,7 @@ func (ts *GenerateSqlStruct) Run(table_schema, table_name string) {
 	rows, err = kinit.Gorm.Raw(sqlStr, table_schema, table_name).Rows()
 	insertStr := insertTable(table_name, rows)
 
-	f, _ := os.Create("work/model/beantmp.go")
+	f, _ := os.Create("work/model/beantmp.txt")
 	fmt.Fprintln(f, "\n", createStr, "\n", insertStr)
 
 }
