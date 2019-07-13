@@ -31,8 +31,15 @@ func (ts *GenerateSqlStruct) Run(table_schema, table_name string) {
 	rows, err = kinit.Gorm.Raw(sqlStr, table_schema, table_name).Rows()
 	insertStr := insertTable(table_name, rows)
 
+	sqlStr = "select column_name from information_schema.key_column_usage where table_schema=? and table_name=?;"
+	rows, err = kinit.Gorm.Raw(sqlStr, table_schema, table_name).Rows()
+	getStr := getTable(table_name, rows)
+
+	rows, err = kinit.Gorm.Raw(sqlStr, table_schema, table_name).Rows()
+	updateStr := updateTable(table_name, rows)
+
 	f, _ := os.Create("work/model/beantmp.txt")
-	fmt.Fprintln(f, "\n", createStr, "\n", insertStr)
+	fmt.Fprintln(f, "\n", createStr, "\n", insertStr, "\n", getStr, "\n", updateStr)
 
 }
 
@@ -96,6 +103,64 @@ func insertTable(table_name string, rows *ksql.Rows) string {
 }`)
 
 	return bf.String() + bt.String()
+}
+
+//---------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------
+func getTable(table_name string, rows *ksql.Rows) string {
+	var sql string
+	sql += ""
+	for rows.Next() {
+		column_name := ""
+		err := rows.Scan(&column_name)
+		if err != nil {
+			kinit.LogError.Println("scan fail :", err)
+			return ""
+		}
+		sql += fmt.Sprintf(`
+func Get%sBy%s(tx *jgorm.DB, %s xxxx) kmodel.%s {
+	if tx == nil {
+		tx = kinit.Gorm
+	}
+	var objs kmodel.%s
+	tx.Where("%s=? ", %s).First(&objs)
+	return objs
+}`, converUpper(table_name), converUpper(column_name), column_name, converUpper(table_name),
+			converUpper(table_name),
+			column_name, column_name)
+	}
+
+	return sql
+}
+
+//---------------------------------------------------------------------------
+func updateTable(table_name string, rows *ksql.Rows) string {
+	var sql string
+	sql += ""
+	for rows.Next() {
+		column_name := ""
+		err := rows.Scan(&column_name)
+		if err != nil {
+			kinit.LogError.Println("scan fail :", err)
+			return ""
+		}
+		sql += fmt.Sprintf(`
+func Update%sBy%s(tx *jgorm.DB, %s xxx) error {
+	if tx == nil {
+		tx = kinit.Gorm
+	}
+
+	if err := tx.Model(kmodel.%s{}).Where("%s=?", %s).Updates(map[string]interface{}{"xxx": xxxx}).Error; err != nil {
+		kinit.LogError.Println(err)
+		return err
+	}
+	return nil
+}`, converUpper(table_name), converUpper(column_name), column_name,
+			converUpper(table_name), column_name, column_name)
+	}
+
+	return sql
 }
 
 //---------------------------------------------------------------------------
